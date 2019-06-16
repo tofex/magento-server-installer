@@ -22,6 +22,7 @@ class MagentoServerInstaller
 
         $files = $this->readDirectory($downloadPath, true, true);
 
+        var_dump(rtrim($this->composer->getConfig()->get('vendor-dir'), '/'));
         echo sprintf("Files: %d\n", count($files));
         foreach ($files as $file) {
             echo sprintf("Removing: %s\n", $file);
