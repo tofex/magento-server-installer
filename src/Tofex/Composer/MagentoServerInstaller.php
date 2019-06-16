@@ -22,6 +22,9 @@ class MagentoServerInstaller
 
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
+            if (basename($file) === 'composer.json') {
+                continue;
+            }
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
             if (file_exists($targetFile)) {
                 @unlink($targetFile);
@@ -32,6 +35,9 @@ class MagentoServerInstaller
 
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
+            if (basename($file) === 'composer.json') {
+                continue;
+            }
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
             $this->filesystem->ensureDirectoryExists(dirname($targetFile));
             copy($file, $targetFile);
@@ -48,6 +54,9 @@ class MagentoServerInstaller
 
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
+            if (basename($file) === 'composer.json') {
+                continue;
+            }
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
             if (file_exists($targetFile)) {
                 @unlink($targetFile);
@@ -60,6 +69,9 @@ class MagentoServerInstaller
 
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
+            if (basename($file) === 'composer.json') {
+                continue;
+            }
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
             $this->filesystem->ensureDirectoryExists(dirname($targetFile));
             copy($file, $targetFile);
@@ -76,6 +88,9 @@ class MagentoServerInstaller
 
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
+            if (basename($file) === 'composer.json') {
+                continue;
+            }
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
             if (file_exists($targetFile)) {
                 @unlink($targetFile);
