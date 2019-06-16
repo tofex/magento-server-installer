@@ -4,7 +4,7 @@ namespace Tofex\Composer;
 
 use Composer\Installer\LibraryInstaller;
 use Composer\Package\PackageInterface;
-use InvalidArgumentException;
+use Composer\Repository\InstalledRepositoryInterface;
 
 /**
  * @author  Andreas Knollmann
@@ -15,12 +15,24 @@ class MagentoServerInstaller
     /**
      * {@inheritDoc}
      */
-    public function getInstallPath(PackageInterface $package)
+    public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
-        if ($this->composer->getPackage()) {
-            return '';
-        } else {
-            throw new InvalidArgumentException('The root package is not configured properly.');
+        $this->initializeVendorDir();
+        $downloadPath = $this->getInstallPath($package);
+
+        $files = $this->readDirectory($downloadPath, true, true);
+
+        echo sprintf("Files: %d\n", count($files));
+        foreach ($files as $file) {
+            echo sprintf("Removing: %s\n", $file);
+        }
+
+        parent::install($repo, $package);
+
+        $files = $this->readDirectory($downloadPath, true, true);
+        echo sprintf("Files: %d\n", count($files));
+        foreach ($files as $file) {
+            echo sprintf("Copying: %s\n", $file);
         }
     }
 
@@ -30,5 +42,49 @@ class MagentoServerInstaller
     public function supports($packageType)
     {
         return $packageType === 'magento-server';
+    }
+
+    /**
+     * @param string $useDirectoryPath
+     * @param bool   $useRecursive
+     * @param bool   $useFilesOnly
+     * @param string $usePattern
+     *
+     * @return array
+     */
+    protected function readDirectory(
+        $useDirectoryPath,
+        $useRecursive = true,
+        $useFilesOnly = false,
+        $usePattern = null)
+    {
+        $files = array();
+
+        if (file_exists($useDirectoryPath)) {
+            $directoryFiles = preg_grep('/^\.+$/', scandir($useDirectoryPath), PREG_GREP_INVERT);
+
+            foreach ($directoryFiles as $directoryFile) {
+                if ($useFilesOnly === false ||
+                    ($useFilesOnly === true && is_file($useDirectoryPath . '/' . $directoryFile))) {
+                    array_push($files, $useDirectoryPath . '/' . $directoryFile);
+                }
+
+                if ($useRecursive && is_dir($useDirectoryPath . '/' . $directoryFile)) {
+                    $subDirectoryFiles =
+                        $this->readDirectory($useDirectoryPath . '/' . $directoryFile, $useRecursive, $useFilesOnly,
+                            $usePattern);
+
+                    foreach ($subDirectoryFiles as $subDirectoryFile) {
+                        array_push($files, $subDirectoryFile);
+                    }
+                }
+            }
+
+            if ($usePattern !== null) {
+                $files = preg_grep("/$usePattern/", $files);
+            }
+        }
+
+        return $files;
     }
 }
