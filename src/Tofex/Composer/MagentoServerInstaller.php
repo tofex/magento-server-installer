@@ -21,19 +21,17 @@ class MagentoServerInstaller
         $downloadPath = $this->getInstallPath($package);
 
         $files = $this->readDirectory($downloadPath, true, true);
-
-        var_dump(rtrim($this->composer->getConfig()->get('vendor-dir'), '/'));
-        echo sprintf("Files: %d\n", count($files));
         foreach ($files as $file) {
-            echo sprintf("Removing: %s\n", $file);
+            $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            echo sprintf("Removing: %s\n", $targetFile);
         }
 
         parent::install($repo, $package);
 
         $files = $this->readDirectory($downloadPath, true, true);
-        echo sprintf("Files: %d\n", count($files));
         foreach ($files as $file) {
-            echo sprintf("Copying: %s\n", $file);
+            $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            echo sprintf("Copying: %s\n", $targetFile);
         }
     }
 
