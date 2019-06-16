@@ -60,6 +60,7 @@ class MagentoServerInstaller
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            $this->filesystem->ensureDirectoryExists(dirname($targetFile));
             copy($file, $targetFile);
         }
     }
