@@ -1,0 +1,13 @@
+{
+  "name": "tofex/magento-server-installer",
+  "type": "composer-installer",
+  "license": "MIT",
+  "autoload": {
+    "psr-0": {
+      "Tofex\\Composer": "src/"
+    }
+  },
+  "extra": {
+    "class": "Tofex\\Composer\\MagentoServerInstaller"
+  }
+}
