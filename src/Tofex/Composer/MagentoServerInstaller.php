@@ -23,7 +23,9 @@ class MagentoServerInstaller
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
-            echo sprintf("Removing: %s\n", $targetFile);
+            if (file_exists($targetFile)) {
+                @unlink($targetFile);
+            }
         }
 
         parent::install($repo, $package);
@@ -31,8 +33,54 @@ class MagentoServerInstaller
         $files = $this->readDirectory($downloadPath, true, true);
         foreach ($files as $file) {
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
-            echo sprintf("Copying: %s\n", $targetFile);
+            copy($file, $targetFile);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
+    {
+        $this->initializeVendorDir();
+        $downloadPath = $this->getInstallPath($initial);
+
+        $files = $this->readDirectory($downloadPath, true, true);
+        foreach ($files as $file) {
+            $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            if (file_exists($targetFile)) {
+                @unlink($targetFile);
+            }
+        }
+
+        parent::update($repo, $initial, $target);
+
+        $downloadPath = $this->getInstallPath($target);
+
+        $files = $this->readDirectory($downloadPath, true, true);
+        foreach ($files as $file) {
+            $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            copy($file, $targetFile);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
+    {
+        $this->initializeVendorDir();
+        $downloadPath = $this->getInstallPath($package);
+
+        $files = $this->readDirectory($downloadPath, true, true);
+        foreach ($files as $file) {
+            $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            if (file_exists($targetFile)) {
+                @unlink($targetFile);
+            }
+        }
+
+        parent::uninstall($repo, $package);
     }
 
     /**
