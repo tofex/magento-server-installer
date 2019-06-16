@@ -18,14 +18,18 @@ class MagentoServerInstaller
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $this->initializeVendorDir();
+
         $downloadPath = $this->getInstallPath($package);
 
         $files = $this->readDirectory($downloadPath, true, true);
+
         foreach ($files as $file) {
             if (basename($file) === 'composer.json') {
                 continue;
             }
+
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+
             if (file_exists($targetFile)) {
                 @unlink($targetFile);
             }
@@ -34,13 +38,21 @@ class MagentoServerInstaller
         parent::install($repo, $package);
 
         $files = $this->readDirectory($downloadPath, true, true);
+
         foreach ($files as $file) {
             if (basename($file) === 'composer.json') {
                 continue;
             }
+
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+
             $this->filesystem->ensureDirectoryExists(dirname($targetFile));
+
             copy($file, $targetFile);
+
+            if (preg_match('/\.sh$/', $targetFile)) {
+                system(sprintf('chown +x %s', $targetFile));
+            }
         }
     }
 
@@ -53,11 +65,14 @@ class MagentoServerInstaller
         $downloadPath = $this->getInstallPath($initial);
 
         $files = $this->readDirectory($downloadPath, true, true);
+
         foreach ($files as $file) {
             if (basename($file) === 'composer.json') {
                 continue;
             }
+
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+
             if (file_exists($targetFile)) {
                 @unlink($targetFile);
             }
@@ -68,13 +83,21 @@ class MagentoServerInstaller
         $downloadPath = $this->getInstallPath($target);
 
         $files = $this->readDirectory($downloadPath, true, true);
+
         foreach ($files as $file) {
             if (basename($file) === 'composer.json') {
                 continue;
             }
+
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+
             $this->filesystem->ensureDirectoryExists(dirname($targetFile));
+
             copy($file, $targetFile);
+
+            if (preg_match('/\.sh$/', $targetFile)) {
+                system(sprintf('chown +x %s', $targetFile));
+            }
         }
     }
 
@@ -84,14 +107,18 @@ class MagentoServerInstaller
     public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $this->initializeVendorDir();
+
         $downloadPath = $this->getInstallPath($package);
 
         $files = $this->readDirectory($downloadPath, true, true);
+
         foreach ($files as $file) {
             if (basename($file) === 'composer.json') {
                 continue;
             }
+
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+
             if (file_exists($targetFile)) {
                 @unlink($targetFile);
             }
