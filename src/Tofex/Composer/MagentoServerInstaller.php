@@ -51,7 +51,7 @@ class MagentoServerInstaller
             copy($file, $targetFile);
 
             if (preg_match('/\.sh$/', $targetFile)) {
-                system(sprintf('chown +x %s', $targetFile));
+                system(sprintf('chmod +x %s', $targetFile));
             }
         }
     }
@@ -96,7 +96,7 @@ class MagentoServerInstaller
             copy($file, $targetFile);
 
             if (preg_match('/\.sh$/', $targetFile)) {
-                system(sprintf('chown +x %s', $targetFile));
+                system(sprintf('chmod +x %s', $targetFile));
             }
         }
     }
