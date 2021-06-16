@@ -50,7 +50,7 @@ class MagentoServerInstaller
 
             copy($file, $targetFile);
 
-            if (preg_match('/\.sh$/', $targetFile) || preg_match('\/ini$', dirname($targetFile))) {
+            if (preg_match('/\.sh$/', $targetFile) || preg_match('/\/ini$/', dirname($targetFile))) {
                 system(sprintf('chmod +x %s', $targetFile));
             }
         }
@@ -95,7 +95,7 @@ class MagentoServerInstaller
 
             copy($file, $targetFile);
 
-            if (preg_match('/\.sh$/', $targetFile) || preg_match('\/ini$', dirname($targetFile))) {
+            if (preg_match('/\.sh$/', $targetFile) || preg_match('/\/ini$/', dirname($targetFile))) {
                 system(sprintf('chmod +x %s', $targetFile));
             }
         }
