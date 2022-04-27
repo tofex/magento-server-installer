@@ -2,6 +2,9 @@
   "name": "tofex/magento-server-installer",
   "type": "composer-installer",
   "license": "MIT",
+  "require": {
+    "composer/composer": "<2.1.0"
+  },
   "autoload": {
     "psr-0": {
       "Tofex\\Composer": "src/"
