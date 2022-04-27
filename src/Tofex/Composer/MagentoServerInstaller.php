@@ -17,41 +17,53 @@ class MagentoServerInstaller
      */
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
+        echo "Initialize vendor directory\n";
         $this->initializeVendorDir();
 
         $downloadPath = $this->getInstallPath($package);
+        echo sprintf("Download path: %s\n", $downloadPath);
 
         $files = $this->readDirectory($downloadPath, true, true);
+        echo sprintf("Found %d files in download path\n", count($files));
 
         foreach ($files as $file) {
+            echo sprintf("Checking file: %s\n", $file);
+
             if (basename($file) === 'composer.json') {
                 continue;
             }
 
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            echo sprintf("Target file: %s\n", $targetFile);
 
             if (file_exists($targetFile)) {
+                echo sprintf("Deleting file: %s\n", $targetFile);
                 @unlink($targetFile);
             }
         }
 
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = parent::install($repo, $package);
 
         $files = $this->readDirectory($downloadPath, true, true);
+        echo sprintf("Found %d files in download path\n", count($files));
 
         foreach ($files as $file) {
+            echo sprintf("Checking file: %s\n", $file);
+
             if (basename($file) === 'composer.json') {
                 continue;
             }
 
             $targetFile = str_replace('vendor/tofex/magento-server/', '', $file);
+            echo sprintf("Target file: %s\n", $targetFile);
 
             $this->filesystem->ensureDirectoryExists(dirname($targetFile));
 
             copy($file, $targetFile);
+            echo sprintf("Copying file: %s to: %s\n", $file, $targetFile);
 
             if (preg_match('/\.sh$/', $targetFile) || preg_match('/\/ini$/', dirname($targetFile))) {
+                echo sprintf("Changing file: %s to executable\n", $targetFile);
                 system(sprintf('chmod +x %s', $targetFile));
             }
         }
@@ -81,7 +93,6 @@ class MagentoServerInstaller
             }
         }
 
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = parent::update($repo, $initial, $target);
 
         $downloadPath = $this->getInstallPath($target);
@@ -130,7 +141,6 @@ class MagentoServerInstaller
             }
         }
 
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
         $result = parent::uninstall($repo, $package);
 
         return $result;
