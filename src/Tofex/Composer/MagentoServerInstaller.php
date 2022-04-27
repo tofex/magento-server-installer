@@ -35,7 +35,8 @@ class MagentoServerInstaller
             }
         }
 
-        parent::install($repo, $package);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $result = parent::install($repo, $package);
 
         $files = $this->readDirectory($downloadPath, true, true);
 
@@ -54,6 +55,8 @@ class MagentoServerInstaller
                 system(sprintf('chmod +x %s', $targetFile));
             }
         }
+
+        return $result;
     }
 
     /**
@@ -78,7 +81,8 @@ class MagentoServerInstaller
             }
         }
 
-        parent::update($repo, $initial, $target);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $result = parent::update($repo, $initial, $target);
 
         $downloadPath = $this->getInstallPath($target);
 
@@ -99,6 +103,8 @@ class MagentoServerInstaller
                 system(sprintf('chmod +x %s', $targetFile));
             }
         }
+
+        return $result;
     }
 
     /**
@@ -124,7 +130,10 @@ class MagentoServerInstaller
             }
         }
 
-        parent::uninstall($repo, $package);
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        $result = parent::uninstall($repo, $package);
+
+        return $result;
     }
 
     /**
@@ -149,7 +158,7 @@ class MagentoServerInstaller
         $useFilesOnly = false,
         $usePattern = null)
     {
-        $files = array();
+        $files = [];
 
         if (file_exists($useDirectoryPath)) {
             $directoryFiles = preg_grep('/^\.+$/', scandir($useDirectoryPath), PREG_GREP_INVERT);
