@@ -4,6 +4,9 @@ namespace Tofex\Composer;
 
 use Composer\Installer\LibraryInstaller;
 use Composer\Package\PackageInterface;
+use Composer\Plugin\PluginEvents;
+use Composer\Plugin\PostFileDownloadEvent;
+use Composer\Plugin\PreFileDownloadEvent;
 use Composer\Repository\InstalledRepositoryInterface;
 
 /**
@@ -11,6 +14,7 @@ use Composer\Repository\InstalledRepositoryInterface;
  */
 class MagentoServerInstaller
     extends LibraryInstaller
+    implements \Composer\EventDispatcher\EventSubscriberInterface
 {
     /**
      * {@inheritDoc}
@@ -196,5 +200,68 @@ class MagentoServerInstaller
         }
 
         return $files;
+    }
+
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     * * The method name to call (priority defaults to 0)
+     * * An array composed of the method name to call and the priority
+     * * An array of arrays composed of the method names to call and respective
+     *   priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     * * array('eventName' => 'methodName')
+     * * array('eventName' => array('methodName', $priority))
+     * * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+     *
+     * @return array<string, string|array{0: string, 1?: int}|array<array{0: string, 1?: int}>> The event names to
+     *                       listen to
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            PluginEvents::PRE_FILE_DOWNLOAD  => [['onPreFileDownload', 0]],
+            PluginEvents::POST_FILE_DOWNLOAD => [['onPostFileDownload', 0]]
+        ];
+    }
+
+    /**
+     * @param PreFileDownloadEvent $event
+     */
+    public function onPreFileDownload(PreFileDownloadEvent $event)
+    {
+        $type = $event->getType();
+        echo sprintf("Type: %s\n", $type);
+
+        $package = $event->getContext();
+        echo sprintf("Context package class: %s\n", get_class($package));
+
+        if ($package instanceof PackageInterface) {
+            $downloadPath = $this->getInstallPath($package);
+
+            echo sprintf("onPreFileDownload download path: %s\n", $downloadPath);
+        }
+    }
+
+    /**
+     * @param PostFileDownloadEvent $event
+     */
+    public function onPostFileDownload(PostFileDownloadEvent $event)
+    {
+        $type = $event->getType();
+        echo sprintf("Type: %s\n", $type);
+
+        $package = $event->getContext();
+        echo sprintf("Context package class: %s\n", get_class($package));
+
+        if ($package instanceof PackageInterface) {
+            $downloadPath = $this->getInstallPath($package);
+
+            echo sprintf("onPostFileDownload download path: %s\n", $downloadPath);
+        }
     }
 }
