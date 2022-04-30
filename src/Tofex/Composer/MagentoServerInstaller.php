@@ -2,6 +2,7 @@
 
 namespace Tofex\Composer;
 
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginEvents;
@@ -14,7 +15,7 @@ use Composer\Repository\InstalledRepositoryInterface;
  */
 class MagentoServerInstaller
     extends LibraryInstaller
-    implements \Composer\EventDispatcher\EventSubscriberInterface
+    implements EventSubscriberInterface
 {
     /**
      * {@inheritDoc}
