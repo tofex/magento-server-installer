@@ -1,11 +1,12 @@
 {
   "name": "tofex/magento-server-installer",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "type": "composer-plugin",
   "description": "Tofex Magento Server Installer",
   "license": "MIT",
   "require": {
     "php": ">=7.2.0",
+    "composer-plugin-api": "^1.0 || ^2.0",
     "composer/installers": "~1.0"
   },
   "autoload": {
