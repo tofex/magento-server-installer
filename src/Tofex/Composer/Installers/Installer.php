@@ -30,7 +30,7 @@ class Installer
         if ($this->composer instanceof Composer) {
             $installer = new MagentoServerInstaller($package, $this->composer, $this->io);
 
-            return $installer->getInstallPath($package, 'component');
+            return $installer->getInstallPath($package, 'magento-server');
         }
 
         return parent::getInstallPath($package);
