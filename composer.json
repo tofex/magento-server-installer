@@ -1,17 +1,20 @@
 {
   "name": "tofex/magento-server-installer",
+  "version": "1.2.0",
   "type": "composer-plugin",
+  "description": "Tofex Magento Server Installer",
   "license": "MIT",
-  "version": "1.1.16",
   "require": {
-    "composer-plugin-api": ">=2.1.0"
+    "php": ">=7.2.0",
+    "composer-plugin-api": ">=2.1.0",
+    "composer/installers": "~1.0"
   },
   "autoload": {
-    "psr-0": {
-      "Tofex\\Composer": "src/"
+    "psr-4": {
+      "Tofex\\Composer\\Installers\\": "src/Tofex/Composer/Installers"
     }
   },
   "extra": {
-    "class": "Tofex\\Composer\\MagentoServerInstaller"
+    "class": "Tofex\\Composer\\Installers\\Plugin"
   }
 }
