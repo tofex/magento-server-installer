@@ -48,4 +48,17 @@ class Installer
 
         return parent::update($repo, $initial, $target);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
+    {
+        echo sprintf("%s\n", $repo->getRepoName());
+        echo sprintf("%s\n", $package->getName());
+        echo sprintf("%s\n", $package->getVersion());
+        echo sprintf("%s\n", implode("\n", $package->getBinaries()));
+
+        return parent::uninstall($repo, $package);
+    }
 }
