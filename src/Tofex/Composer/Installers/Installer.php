@@ -5,6 +5,7 @@ namespace Tofex\Composer\Installers;
 use Composer\Composer;
 use Composer\Installer\LibraryInstaller;
 use Composer\Package\PackageInterface;
+use Composer\Repository\InstalledRepositoryInterface;
 
 /**
  * @author      Andreas Knollmann
@@ -34,5 +35,17 @@ class Installer
         }
 
         return parent::getInstallPath($package);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
+    {
+        echo sprintf("%s\n", $repo->getRepoName());
+        echo sprintf("%s\n", $initial->getName());
+        echo sprintf("%s\n", implode("\n", $initial->getBinaries()));
+
+        return parent::update($repo, $initial, $target);
     }
 }
